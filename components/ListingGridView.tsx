@@ -58,9 +58,10 @@ const CloseButton = styled.button`
 
 interface ListingGridViewProps {
     listing: Listing;
+    onEdit: (listing: Listing) => void; // KP -- added for editting posts
 }
 
-export default function ListingGridView({ listing }: ListingGridViewProps) {
+export default function ListingGridView({ listing, onEdit }: ListingGridViewProps) {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -72,7 +73,7 @@ export default function ListingGridView({ listing }: ListingGridViewProps) {
             {showModal && (
                 <ModalOverlay>
                     <ModalContent>
-                        <ListingDetailView listing={listing} />
+                        <ListingDetailView listing={listing} onEdit={onEdit} />
                         <CloseButton onClick={() => setShowModal(false)}>
                             Close
                         </CloseButton>

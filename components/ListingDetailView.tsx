@@ -11,13 +11,14 @@ const StyledListingWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    min-height: 100%;
+    height: 50vh;
 `
 
 const StyledImage = styled.img`
-    min-width: 45%;
-    max-width: 45%;
+    width: 45%;
+    height: 100%;
     min-height: 100%;
+    object-fit: cover;
     border-radius: 12px 0 0 12px;
     box-shadow: #3a6d78 2px -1px 10px;
 
@@ -40,19 +41,29 @@ const StyledListingTitle = styled.h2`
     margin-top: 1%;
     margin-left: 2%;
     font-weight: 600;
+    color: #ffffff;
 `
 
 const StyledListingDescription = styled.p`
     font-size: calc(1px + 1.45vw);
     padding-top: 5%;
     padding-bottom: 10%;
+    padding-left: 2%;
+    padding-right: 2%;
+    background-color: #a3aeae;
+    border-radius: 15px;
+    border: 3px solid #849e9e;
+    min-height: 65%;
+    max-height: 65%;
 `
 
 const StyledListingPrice = styled.p`
     font-size: calc(1px + 1.7vw);
-    padding-top: 30%;
     position: absolute;
-    top: 55%;
+    bottom: 10%;
+    background-color: #a3aeae;
+    border-radius: 15px;
+    border: 3px solid #849e9e;
 `
 const StyledMailTo = styled.a`
     background-color: #848a89;
@@ -62,8 +73,8 @@ const StyledMailTo = styled.a`
     border-radius: 12px;
     width: 35%;
     position: absolute;
-    top: 90%;
-    left: 60%;
+    bottom: 3%;  
+    right: 3%;
     padding: 2.3% 1%;
     text-align: center;
     height: 7.5%;

@@ -26,22 +26,23 @@ const PageHeader = styled.div`
 const Title = styled.h1`
     margin: 0 0 8px;
     color: #16324f;
-    font-size: 40px;
+    font-size: 2.5rem;
 `;
 
 const Subtitle = styled.p`
     margin: 0;
     color: #52687d;
-    font-size: 16px;
+    font-size: 1rem;
 `;
 
 const LogoutButton = styled.button`
-    margin-top: 12px;
+    margin-top: 1%;
+    margin-left: 1%;
     padding: 10px 16px;
     background: #16324f;
     color: white;
     border: none;
-    border-radius: 999px;
+    border-radius: 5vw;
     cursor: pointer;
 `;
 
@@ -51,7 +52,7 @@ const ProfileButton = styled.button`
     background: #16324f;
     color: white;
     border: none;
-    border-radius: 999px;
+    border-radius: 5vw;
     cursor: pointer;
 `;
 
@@ -93,6 +94,11 @@ const EmptyState = styled.p`
 export default function Home() {
     const [listings, setListings] = useState<Listing[]>([]);
     const [editingListing, setEditingListing] = useState<Listing | null>(null);
+    let listingFormKey = "create";
+
+    if (editingListing) {
+        listingFormKey = editingListing._id.toString();
+    }
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -162,7 +168,7 @@ redirects them to their personal profile page showing their listings.
 
             <ContentLayout>
                 <ListingForm
-                    key={editingListing?._id.toString() ?? "create"}
+                    key={listingFormKey}
                     editingListing={editingListing}
                     onCancelEdit={() => setEditingListing(null)}
                     onSaved={handleSavedListing}

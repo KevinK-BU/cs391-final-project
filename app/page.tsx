@@ -35,6 +35,16 @@ const Subtitle = styled.p`
     font-size: 1rem;
 `;
 
+const LogoutButton = styled.button`
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #16324f;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+`;
+
 const ContentLayout = styled.div`
     display: grid;
     grid-template-columns: minmax(320px, 380px) 1fr;
@@ -97,6 +107,14 @@ export default function Home() {
         setEditingListing(null);
     }
 
+    async function handleLogout() {
+        await fetch("/api/auth/logout", {
+            method: "POST",
+        });
+
+        window.location.href = "/login";
+    }
+
     return (
         <PageWrapper>
             <PageHeader>
@@ -104,6 +122,9 @@ export default function Home() {
                 <Subtitle>
                     Browse the marketplace, create a new post, or edit an existing listing.
                 </Subtitle>
+                <LogoutButton type="button" onClick={handleLogout}>
+                    Logout
+                </LogoutButton>
             </PageHeader>
 
             <ContentLayout>

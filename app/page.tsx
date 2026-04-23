@@ -26,13 +26,13 @@ const PageHeader = styled.div`
 const Title = styled.h1`
     margin: 0 0 8px;
     color: #16324f;
-    font-size: 2.5rem;
+    font-size: 40px;
 `;
 
 const Subtitle = styled.p`
     margin: 0;
     color: #52687d;
-    font-size: 1rem;
+    font-size: 16px;
 `;
 
 const LogoutButton = styled.button`

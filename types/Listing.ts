@@ -17,4 +17,18 @@ export type Listing = {
     image: string,
     price: number,
     user_id: string,
+    sellerEmail: string,
+}
+/*
+Added section below -- Kristian Plonski
+- added sellerEmail to the listing type so each post stores the sellers contact email
+- and new ListingInput type to represent the data needed for creating/editingg a listing
+*/
+export type ListingInput = {
+    title: string,
+    description: string,
+    image: string,
+    price: number,
+    user_id: string,
+    sellerEmail: string,
 }

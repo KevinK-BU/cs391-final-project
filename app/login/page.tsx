@@ -1,6 +1,7 @@
 "use client";
 import styled from "styled-components";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -82,15 +83,54 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
+const Message = styled.p`
+  color: firebrick;
+  font-size: calc(2px + 1vw);
+`;
+
 const SiteTitle = styled.h1`
   font: calc(2px + 2vw) bold;
   margin-bottom: 5%;
 `;
 
 export default function Login() {
+  const router = useRouter();
   const [checked, setChecked] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const isRegister = checked;
+
+  async function handleSubmit(event: { preventDefault: () => void }) {
+    event.preventDefault();
+    setError("");
+
+    const route = isRegister ? "/api/auth/register" : "/api/auth/login";
+
+    const response = await fetch(route, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error);
+      return;
+    }
+
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <PageWrapper>
@@ -121,17 +161,32 @@ export default function Login() {
             : "Sign in with your email and password"}
         </Text>
 
-        <Form>
-          {isRegister && <Input type="text" placeholder="Full name" />}
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
+        <Form onSubmit={handleSubmit}>
           {isRegister && (
-            <Input type="password" placeholder="Confirm password" />
+            <Input
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
           )}
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
           <SubmitButton type="submit">
             {isRegister ? "Register" : "Login"}
           </SubmitButton>
         </Form>
+        {error && <Message>{error}</Message>}
       </CardDiv>
     </PageWrapper>
   );

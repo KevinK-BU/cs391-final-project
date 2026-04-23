@@ -1,17 +1,39 @@
+
+/*
+This is the detailed view modal of a given listing!
+- built by Kevin Kupeli
+- the component will render when a listing is clicked, and will show the details of a listing
+    - details:
+    - price
+    - listing title and description
+    - item image
+ */
+
+
+/*
+Kristian Plonski changes:
+- replaced hardcoded email w real sellerEmail for each listing
+- added edit button so a listing can go back to form for modification
+*/
+
 import { Listing } from "@/types/Listing";
 import styled from "styled-components";
 
-
-
 interface ListingDetailViewProps {
     listing: Listing;
+    onEdit?: (listing: Listing) => void; 
+    //KP - prop to receive onEdit function, if does, function is called w a listing
 }
 
 const StyledListingWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 50vh;
+    min-height: 100%;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
 `
 
 // using "object-fit: cover;" so that user inputted images fully
@@ -19,12 +41,19 @@ const StyledListingWrapper = styled.div`
 // got styling idea for object-fit from claude.ai
 
 const StyledImage = styled.img`
-    width: 45%;
-    height: 100%;
+    min-width: 45%;
+    max-width: 45%;
     min-height: 100%;
-    object-fit: cover;
     border-radius: 12px 0 0 12px;
     box-shadow: #3a6d78 2px -1px 10px;
+
+    @media (max-width: 900px) {
+        min-width: 100%;
+        max-width: 100%;
+        max-height: 280px;
+        object-fit: cover;
+        border-radius: 12px 12px 0 0;
+    }
 `
 
 const StyledListingInformation = styled.div`
@@ -36,6 +65,12 @@ const StyledListingInformation = styled.div`
     margin-right: 2%;
     padding: 0;
     position: relative;
+
+    @media (max-width: 900px) {
+        width: auto;
+        margin: 20px;
+        min-height: 320px;
+    }
 `
 
 const StyledListingTitle = styled.h2`
@@ -44,30 +79,42 @@ const StyledListingTitle = styled.h2`
     margin-top: 1%;
     margin-left: 2%;
     font-weight: 600;
-    color: #ffffff;
 `
 
 const StyledListingDescription = styled.p`
     font-size: calc(1px + 1.45vw);
     padding-top: 5%;
     padding-bottom: 10%;
-    padding-left: 2%;
-    padding-right: 2%;
-    background-color: #a3aeae;
-    border-radius: 15px;
-    border: 3px solid #849e9e;
-    min-height: 65%;
-    max-height: 65%;
 `
 
 const StyledListingPrice = styled.p`
     font-size: calc(1px + 1.7vw);
+    padding-top: 30%;
     position: absolute;
-    bottom: 10%;
-    background-color: #a3aeae;
-    border-radius: 15px;
-    border: 3px solid #849e9e;
+    top: 55%;
+
+    @media (max-width: 900px) {
+        position: static;
+        padding-top: 20px;
+    }
 `
+
+const ButtonRow = styled.div`
+    position: absolute;
+    top: 90%;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    @media (max-width: 900px) {
+        position: static;
+        margin-top: 24px;
+        flex-wrap: wrap;
+    }
+`
+
 const StyledMailTo = styled.a`
     background-color: #848a89;
     &:hover {
@@ -75,32 +122,45 @@ const StyledMailTo = styled.a`
     }
     border-radius: 12px;
     width: 35%;
-    position: absolute;
-    bottom: 3%;  
-    right: 3%;
-    padding: 2.3% 1%;
+    min-width: 160px;
+    padding: 12px 14px;
     text-align: center;
-    height: 7.5%;
-    
-    
+    color: white;
 `
 
-const getUserEmailFromID = (id: string) => {
-    return "johndoe@gmail.com"
-}
+const EditButton = styled.button`
+    background-color: #16324f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    min-width: 140px;
+    padding: 12px 14px;
+    cursor: pointer;
 
-export default function ListingDetailView({ listing }: ListingDetailViewProps) {
-    const email = getUserEmailFromID(listing._id.toString());
+    &:hover {
+        background: #234c74;
+    }
+`
 
+export default function ListingDetailView({ listing, onEdit }: ListingDetailViewProps) {
     return (
         <StyledListingWrapper>
             <StyledImage src={listing.image} alt="Listing image" />
             <StyledListingInformation>
                 <StyledListingTitle>{listing.title}</StyledListingTitle>
                 <StyledListingDescription>{listing.description}</StyledListingDescription>
-                <StyledListingPrice>{"$ "+ listing.price + ".00"}</StyledListingPrice>
-                <StyledMailTo href={"mailto:" + email}>Contact Seller</StyledMailTo>
+                <StyledListingPrice>{"$ "+ listing.price}</StyledListingPrice>
+                <ButtonRow> 
+                    <StyledMailTo href={"mailto:" + listing.sellerEmail}>Contact Seller</StyledMailTo>
+                    {onEdit && (
+                        <EditButton type="button" onClick={() => onEdit(listing)}>
+                            Edit Listing
+                        </EditButton>
+                    )}
+                </ButtonRow>
             </StyledListingInformation>
         </StyledListingWrapper>
     );
 }
+//Button Row makes link which goes to the sellers email clicking it opens 
+//users default email app with the to field filled out - KP

@@ -1,65 +1,196 @@
-import Image from "next/image";
+/*
+Kristian Plonski changes:
+- added listing for homepage layout
+- added state for editting a selected listing
+- update page so new created or edited listings instantly show
+*/
+
+"use client"
+
+import styled from 'styled-components';
+import {useEffect, useState} from "react";
+import {Listing} from "@/types/Listing";
+import ListingGridView from "@/components/ListingGridView";
+import ListingForm from "@/components/ListingForm"; //KP
+
+const PageWrapper = styled.main`
+    min-height: 100vh;
+    padding: 28px;
+    background: #edf3f8;
+`;
+
+const PageHeader = styled.div`
+    margin-bottom: 24px;
+`;
+
+const Title = styled.h1`
+    margin: 0 0 8px;
+    color: #16324f;
+    font-size: 2.5rem;
+`;
+
+const Subtitle = styled.p`
+    margin: 0;
+    color: #52687d;
+    font-size: 1rem;
+`;
+
+const LogoutButton = styled.button`
+    margin-top: 1%;
+    margin-left: 1%;
+    padding: 10px 16px;
+    background: #16324f;
+    color: white;
+    border: none;
+    border-radius: 5vw;
+    cursor: pointer;
+`;
+
+const ProfileButton = styled.button`
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #16324f;
+    color: white;
+    border: none;
+    border-radius: 5vw;
+    cursor: pointer;
+`;
+
+const ContentLayout = styled.div`
+    display: grid;
+    grid-template-columns: minmax(320px, 380px) 1fr;
+    gap: 24px;
+    align-items: start;
+
+    @media (max-width: 980px) {
+        grid-template-columns: 1fr;
+    }
+`;
+
+const ListingGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+`;
+
+const ListingSection = styled.section`
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #d5e1ec;
+    border-radius: 20px;
+    padding: 20px;
+`;
+
+const SectionTitle = styled.h2`
+    margin: 0 0 16px;
+    color: #16324f;
+`;
+
+const EmptyState = styled.p`
+    margin: 0;
+    color: #52687d;
+`;
+
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    const [listings, setListings] = useState<Listing[]>([]);
+    const [editingListing, setEditingListing] = useState<Listing | null>(null);
+    let listingFormKey = "create";
+
+    if (editingListing) {
+        listingFormKey = editingListing._id.toString();
+    }
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            const res = await fetch("/api/listings");
+            const data = await res.json();
+            setListings(data);
+        };
+        fetchListings();
+    }, []);
+
+    function handleSavedListing(savedListing: Listing, mode: "create" | "edit") {
+        if (mode === "create") {
+            setListings((currentListings) => [savedListing, ...currentListings]);
+            return;
+        }
+
+        setListings((currentListings) =>
+            currentListings.map((listing) =>
+                listing._id.toString() === savedListing._id.toString() ? savedListing : listing
+            )
+        );
+        setEditingListing(null);
+    }
+
+    async function handleLogout() {
+        await fetch("/api/auth/logout", {
+            method: "POST",
+        });
+
+        window.location.href = "/login";
+    }
+
+/* Added by Ibrahim Alburi:
+Reads the logged-in user's ID directly from the browser cookie and
+redirects them to their personal profile page showing their listings.
+*/
+    async function handleProfile() {
+
+    const response = await fetch("/api/auth/me");
+
+    const data = await response.json();
+
+    if (!data.user) return;
+
+    const userId = data.user.id;
+
+    window.location.href = `/profile/${userId}`;
+    }
+
+    return (
+        <PageWrapper>
+            <PageHeader>
+                <Title>Simple Shop</Title>
+                <Subtitle>
+                    Browse the marketplace, create a new post, or edit an existing listing.
+                </Subtitle>
+                    <div>
+                        <ProfileButton type="button" onClick={handleProfile}>
+                            Profile
+                        </ProfileButton>
+
+                        <LogoutButton type="button" onClick={handleLogout}>
+                            Logout
+                        </LogoutButton>
+                    </div>
+            </PageHeader>
+
+            <ContentLayout>
+                <ListingForm
+                    key={listingFormKey}
+                    editingListing={editingListing}
+                    onCancelEdit={() => setEditingListing(null)}
+                    onSaved={handleSavedListing}
+                />
+
+                <ListingSection>
+                    <SectionTitle>Marketplace Listings</SectionTitle>
+                    {listings.length === 0 ? (
+                        <EmptyState>No listings found yet. Create the first one on the left.</EmptyState>
+                    ) : (
+                        <ListingGrid>
+                            {listings.map(listing => (
+                                <ListingGridView
+                                    key={listing._id.toString()}
+                                    listing={listing}
+                                    onEdit={setEditingListing}
+                                />
+                            ))}
+                        </ListingGrid>
+                    )}
+                </ListingSection>
+            </ContentLayout>
+        </PageWrapper>
+    );
 }

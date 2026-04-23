@@ -16,12 +16,11 @@ const FormCard = styled.div`
     border: 1px solid #c9d8e6;
     border-radius: 18px;
     padding: 24px;
-    box-shadow: 0 12px 28px rgba(34, 62, 94, 0.12);
 `;
 
 const FormTitle = styled.h2`
     margin: 0 0 8px;
-    font-size: 1.5rem;
+    font-size: 24px;
     color: #16324f;
 `;
 
@@ -39,14 +38,14 @@ const Label = styled.label`
     display: grid;
     gap: 6px;
     color: #16324f;
-    font-weight: 600;
+    font-weight: bold;
 `;
 
 const Input = styled.input`
     border: 1px solid #b9cada;
     border-radius: 12px;
     padding: 12px 14px;
-    font-size: 1rem;
+    font-size: 16px;
     background: white;
     color: #10263c;
 `;
@@ -56,7 +55,7 @@ const TextArea = styled.textarea`
     border-radius: 12px;
     padding: 12px 14px;
     min-height: 120px;
-    font-size: 1rem;
+    font-size: 16px;
     resize: vertical;
     background: white;
     color: #10263c;
@@ -76,7 +75,7 @@ const PrimaryButton = styled.button`
     background: #16324f;
     color: white;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: bold;
 
     &:hover {
         background: #234c74;
@@ -90,7 +89,7 @@ const SecondaryButton = styled.button`
     background: white;
     color: #16324f;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: bold;
 
     &:hover {
         background: #edf4fb;
@@ -109,6 +108,8 @@ interface ListingFormProps {
     onSaved: (listing: Listing, mode: "create" | "edit") => void;
 }
 
+// -- KP --
+//blank values when form is empty
 const emptyForm: ListingInput = {
     title: "",
     description: "",
@@ -118,6 +119,8 @@ const emptyForm: ListingInput = {
     sellerEmail: "",
 };
 
+// -- KP --
+//IF its an edit, current form values are filled in, ELSE the form is empty
 function getInitialFormData(editingListing: Listing | null): ListingInput {
     if (!editingListing) {
         return emptyForm;
@@ -133,11 +136,11 @@ function getInitialFormData(editingListing: Listing | null): ListingInput {
     };
 }
 
+// -- KP --
+//formData = current inputs
+//isSubmitting stops duplicate submits
 export default function ListingForm({
-    editingListing,
-    onCancelEdit,
-    onSaved,
-}: ListingFormProps) {
+    editingListing, onCancelEdit, onSaved,}: ListingFormProps) {
     const [formData, setFormData] = useState<ListingInput>(() => getInitialFormData(editingListing));
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");

@@ -26,13 +26,13 @@ const PageHeader = styled.div`
 const Title = styled.h1`
     margin: 0 0 8px;
     color: #16324f;
-    font-size: 2.5rem;
+    font-size: 40px;
 `;
 
 const Subtitle = styled.p`
     margin: 0;
     color: #52687d;
-    font-size: 1rem;
+    font-size: 16px;
 `;
 
 const LogoutButton = styled.button`
@@ -95,11 +95,16 @@ export default function Home() {
     const [listings, setListings] = useState<Listing[]>([]);
     const [editingListing, setEditingListing] = useState<Listing | null>(null);
     let listingFormKey = "create";
-
+// -- KP --
+//stores all listings currently shown on homepage
+//also stores which listing is beign editted ; (lets form switch between create and edit)
+// listingFormKey resets the form whenever a new item is picked for editting so it doesnt transfer over
     if (editingListing) {
         listingFormKey = editingListing._id.toString();
     }
 
+// -- KP --
+//loads listings ; (fills the actual marketplace with data from the backend)
     useEffect(() => {
         const fetchListings = async () => {
             const res = await fetch("/api/listings");
@@ -109,6 +114,9 @@ export default function Home() {
         fetchListings();
     }, []);
 
+// -- KP --
+//makes the homepage update right after adding a listing
+//ALSO: puts new item at thje top ;;; replaces old with new
     function handleSavedListing(savedListing: Listing, mode: "create" | "edit") {
         if (mode === "create") {
             setListings((currentListings) => [savedListing, ...currentListings]);
@@ -189,3 +197,7 @@ redirects them to their personal profile page showing their listings.
         </PageWrapper>
     );
 }
+
+// -- KP --
+// for the listing form above, should ideally send the selected item for editing
+// if cancelled it goes back to create, if saved the homepage updates

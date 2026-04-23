@@ -14,10 +14,12 @@ import ListingGridView from "@/components/ListingGridView";
 import ListingForm from "@/components/ListingForm";
 
 //same CSS as app/page.tsx
+
+//different background color just to differentiate.
 const PageWrapper = styled.main`
     min-height: 100vh;
     padding: 28px;
-    background: #edf3f8;
+    background: #9fcbef;
 `;
 
 const PageHeader = styled.div`
@@ -28,12 +30,6 @@ const Title = styled.h1`
     margin: 0 0 8px;
     color: #16324f;
     font-size: 2.5rem;
-`;
-
-const Subtitle = styled.p`
-    margin: 0;
-    color: #52687d;
-    font-size: 1rem;
 `;
 
 const LogoutButton = styled.button`
@@ -47,6 +43,7 @@ const LogoutButton = styled.button`
     cursor: pointer;
 `;
 
+//ProfileButton becomes HomeButton
 const HomeButton = styled.button`
     margin-top: 12px;
     padding: 10px 16px;
@@ -93,7 +90,7 @@ const EmptyState = styled.p`
 
 //basically same function used in app/page.tsx but this contains username and only shows listings posted by the user.
 export default function ProfilePage() {
-    const [userName, setUserName] = useState<string>(""); //to fetch username
+    const [userName, setUserName] = useState<string>(""); //stores the logged in user's display name
     const [listings, setListings] = useState<Listing[]>([]);
     const [editingListing, setEditingListing] = useState<Listing | null>(null);
 
@@ -103,7 +100,7 @@ export default function ProfilePage() {
     }
 
     useEffect(() => {
-        //load userID & user's listings then update the data
+        //fetch the logged in user data from the auth cookie then use the ID to filter listings
         async function load() {
             const meRes = await fetch("/api/auth/me");
             const meData = await meRes.json();
@@ -139,7 +136,7 @@ export default function ProfilePage() {
         window.location.href = "/login";
     }
 
-    //this is basically the same ass app/page.tsx but its tailored to a specific profile
+    //this is basically the same as app/page.tsx but its tailored to a specific profile
     return (
         <PageWrapper>
             <PageHeader>

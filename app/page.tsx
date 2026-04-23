@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import {useEffect, useState} from "react";
 import {Listing} from "@/types/Listing";
 import ListingGridView from "@/components/ListingGridView";
-import ListingForm from "@/components/ListingForm"; //KP
 
 const PageWrapper = styled.main`
     min-height: 100vh;
@@ -93,43 +92,17 @@ const EmptyState = styled.p`
 
 export default function Home() {
     const [listings, setListings] = useState<Listing[]>([]);
-    const [editingListing, setEditingListing] = useState<Listing | null>(null);
-    let listingFormKey = "create";
-// -- KP --
-//stores all listings currently shown on homepage
-//also stores which listing is beign editted ; (lets form switch between create and edit)
-// listingFormKey resets the form whenever a new item is picked for editting so it doesnt transfer over
-    if (editingListing) {
-        listingFormKey = editingListing._id.toString();
-    }
 
 // -- KP --
 //loads listings ; (fills the actual marketplace with data from the backend)
     useEffect(() => {
-        const fetchListings = async () => {
-            const res = await fetch("/api/listings");
-            const data = await res.json();
-            setListings(data);
+        const loadPageData = async () => {
+            const listingsRes = await fetch("/api/listings");
+            const listingsData = await listingsRes.json();
+            setListings(listingsData);
         };
-        fetchListings();
+        loadPageData();
     }, []);
-
-// -- KP --
-//makes the homepage update right after adding a listing
-//ALSO: puts new item at thje top ;;; replaces old with new
-    function handleSavedListing(savedListing: Listing, mode: "create" | "edit") {
-        if (mode === "create") {
-            setListings((currentListings) => [savedListing, ...currentListings]);
-            return;
-        }
-
-        setListings((currentListings) =>
-            currentListings.map((listing) =>
-                listing._id.toString() === savedListing._id.toString() ? savedListing : listing
-            )
-        );
-        setEditingListing(null);
-    }
 
     async function handleLogout() {
         await fetch("/api/auth/logout", {
@@ -170,13 +143,6 @@ redirects them to their personal profile page showing their listings.
             </PageHeader>
 
             <ContentLayout>
-                <ListingForm
-                    key={listingFormKey}
-                    editingListing={editingListing}
-                    onCancelEdit={() => setEditingListing(null)}
-                    onSaved={handleSavedListing}
-                />
-
                 <ListingSection>
                     <SectionTitle>Marketplace Listings</SectionTitle>
                     {listings.length === 0 ? (
@@ -187,7 +153,6 @@ redirects them to their personal profile page showing their listings.
                                 <ListingGridView
                                     key={listing._id.toString()}
                                     listing={listing}
-                                    onEdit={setEditingListing}
                                 />
                             ))}
                         </ListingGrid>

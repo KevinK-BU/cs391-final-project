@@ -93,6 +93,8 @@ export default function ProfilePage() {
     const [userName, setUserName] = useState<string>(""); //stores the logged in user's display name
     const [listings, setListings] = useState<Listing[]>([]);
     const [editingListing, setEditingListing] = useState<Listing | null>(null);
+    const [currentUserId, setCurrentUserId] = useState("");
+    const [currentUserEmail, setCurrentUserEmail] = useState("");
 
     let listingFormKey = "create";
     if (editingListing) {
@@ -107,6 +109,8 @@ export default function ProfilePage() {
             if (!meData.user) return;
 
             setUserName(meData.user.name);
+            setCurrentUserId(meData.user.id);
+            setCurrentUserEmail(meData.user.email);
 
             const listingsRes = await fetch(`/api/listings?user_id=${meData.user.id}`);
             const listingsData = await listingsRes.json();
@@ -140,7 +144,7 @@ export default function ProfilePage() {
     return (
         <PageWrapper>
             <PageHeader>
-                <Title>{userName}'s Profile</Title>
+                <Title>{userName}&apos;s Profile</Title>
                 <div>
                     <HomeButton type="button" onClick={() => window.location.href = "/"}>
                         Home
@@ -157,10 +161,12 @@ export default function ProfilePage() {
                     editingListing={editingListing}
                     onCancelEdit={() => setEditingListing(null)}
                     onSaved={handleSavedListing}
+                    currentUserId={currentUserId}
+                    currentUserEmail={currentUserEmail}
                 />
 
                 <ListingSection>
-                    <SectionTitle>{userName}'s Listings</SectionTitle>
+                    <SectionTitle>{userName}&apos;s Listings</SectionTitle>
                     {listings.length === 0 ? (
                         <EmptyState>No listings posted yet.</EmptyState>
                     ) : (

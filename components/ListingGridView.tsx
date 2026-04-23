@@ -67,7 +67,7 @@ const CloseButton = styled.button`
 
 interface ListingGridViewProps {
     listing: Listing;
-    onEdit: (listing: Listing) => void; // KP -- added for editting posts
+    onEdit?: (listing: Listing) => void; // KP -- added for editting posts
 }
 
 export default function ListingGridView({ listing, onEdit }: ListingGridViewProps) {

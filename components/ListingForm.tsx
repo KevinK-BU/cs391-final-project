@@ -21,7 +21,7 @@ const FormCard = styled.div`
 
 const FormTitle = styled.h2`
     margin: 0 0 8px;
-    font-size: 24px;
+    font-size: 1.5rem;
     color: #16324f;
 `;
 
@@ -46,7 +46,7 @@ const Input = styled.input`
     border: 1px solid #b9cada;
     border-radius: 12px;
     padding: 12px 14px;
-    font-size: 16px;
+    font-size: 1rem;
     background: white;
     color: #10263c;
 `;
@@ -56,7 +56,7 @@ const TextArea = styled.textarea`
     border-radius: 12px;
     padding: 12px 14px;
     min-height: 120px;
-    font-size: 16px;
+    font-size: 1rem;
     resize: vertical;
     background: white;
     color: #10263c;

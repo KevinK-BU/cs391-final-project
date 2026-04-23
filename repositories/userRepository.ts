@@ -2,6 +2,9 @@ import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/db";
 import { NewUser, User } from "@/types/User";
 
+// Collection of CRUD operations to find users / create users with the db
+// Pretty self-explanitory
+
 export async function findUserByEmail(email: string) {
     const db = await getDb();
     return db.collection<User>("users").findOne({ email });

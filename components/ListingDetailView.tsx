@@ -14,6 +14,10 @@ const StyledListingWrapper = styled.div`
     height: 50vh;
 `
 
+// using "object-fit: cover;" so that user inputted images fully
+// fit the size of the full pop-up component!
+// got styling idea for object-fit from claude.ai
+
 const StyledImage = styled.img`
     width: 45%;
     height: 100%;
@@ -21,7 +25,6 @@ const StyledImage = styled.img`
     object-fit: cover;
     border-radius: 12px 0 0 12px;
     box-shadow: #3a6d78 2px -1px 10px;
-
 `
 
 const StyledListingInformation = styled.div`

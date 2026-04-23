@@ -45,3 +45,16 @@ export async function updateListing(id: string, listing: ListingInput): Promise<
 
     return result;
 }
+
+
+/* below this point added by Ibrahim Alburi: */
+/* allows the listings API route to optionally filter results using a
+user_id query parameter */
+export async function getListingsByUserId(userId: string): Promise<Listing[]> {
+    const db = await getDb();
+
+    return await db
+        .collection<Listing>("listings")
+        .find({ user_id: userId })
+        .toArray();
+}

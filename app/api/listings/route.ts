@@ -1,8 +1,20 @@
 import { NextResponse } from "next/server";
-import { createListing, getListings } from "@/repositories/listingRepository";
+import { createListing, getListings, getListingsByUserId } from "@/repositories/listingRepository";
 import { ListingInput } from "@/types/Listing";
 
-export async function GET() {
+export async function GET(request: Request) {
+
+    // ----- Ibrahim's changes ------
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("user_id");
+
+    // if user id exists in the url then fetch listings and return filtered listings.
+    if (userId) {
+        const userListings = await getListingsByUserId(userId);
+        return NextResponse.json(userListings);
+    }
+    // ------------------------------
+
     const listings = await getListings();
     return NextResponse.json(listings);
 }

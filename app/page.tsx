@@ -45,6 +45,16 @@ const LogoutButton = styled.button`
     cursor: pointer;
 `;
 
+const ProfileButton = styled.button`
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #16324f;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+`;
+
 const ContentLayout = styled.div`
     display: grid;
     grid-template-columns: minmax(320px, 380px) 1fr;
@@ -115,6 +125,23 @@ export default function Home() {
         window.location.href = "/login";
     }
 
+/* Added by Ibrahim Alburi:
+Reads the logged-in user's ID directly from the browser cookie and
+redirects them to their personal profile page showing their listings.
+*/
+    async function handleProfile() {
+
+    const response = await fetch("/api/auth/me");
+
+    const data = await response.json();
+
+    if (!data.user) return;
+
+    const userId = data.user.id;
+
+    window.location.href = `/profile/${userId}`;
+    }
+
     return (
         <PageWrapper>
             <PageHeader>
@@ -122,9 +149,15 @@ export default function Home() {
                 <Subtitle>
                     Browse the marketplace, create a new post, or edit an existing listing.
                 </Subtitle>
-                <LogoutButton type="button" onClick={handleLogout}>
-                    Logout
-                </LogoutButton>
+                    <div>
+                        <ProfileButton type="button" onClick={handleProfile}>
+                            Profile
+                        </ProfileButton>
+
+                        <LogoutButton type="button" onClick={handleLogout}>
+                            Logout
+                        </LogoutButton>
+                    </div>
             </PageHeader>
 
             <ContentLayout>

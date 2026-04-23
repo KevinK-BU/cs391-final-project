@@ -136,16 +136,11 @@ Reads the logged-in user's ID directly from the browser cookie and
 redirects them to their personal profile page showing their listings.
 */
     async function handleProfile() {
-
-    const response = await fetch("/api/auth/me");
-
-    const data = await response.json();
-
-    if (!data.user) return;
-
-    const userId = data.user.id;
-
-    window.location.href = `/profile/${userId}`;
+        const response = await fetch("/api/auth/me");
+        const data = await response.json();
+        if (!data.user) return;
+        const userId = data.user.id;
+        window.location.href = `/profile/${userId}`;
     }
 
     return (

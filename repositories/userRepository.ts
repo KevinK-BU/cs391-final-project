@@ -3,7 +3,7 @@ import { getDb } from "@/lib/db";
 import { NewUser, User } from "@/types/User";
 
 // Collection of CRUD operations to find users / create users with the db
-// Pretty self-explanitory
+// Pretty self-explanitory. Made by Connor
 
 export async function findUserByEmail(email: string) {
     const db = await getDb();

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-// Type file for the user json
+// Type file for the user json. Made by Connor
 
 export type User = {
     _id: ObjectId;

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Login main page. Made by Connor
+
 const PageWrapper = styled.div`
   height: 100vh;
   display: flex;

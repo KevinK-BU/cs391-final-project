@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Using Next.js proxy file to handle fallbacks for unauthenticated users
+// Using Next.js proxy file to handle fallbacks for unauthenticated users. Made by Connor
 // https://nextjs.org/docs/app/getting-started/proxy
 
 export default function proxy(request: NextRequest) {

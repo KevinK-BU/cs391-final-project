@@ -113,7 +113,7 @@ export default function ListingGridView({ listing, onEdit }: ListingGridViewProp
     return (
         <>
             <StyledButton onClick={() => setShowModal(true)}>
-                <StyledImage src={listing.image}/>
+                <StyledImage src={listing.image} alt={listing.title}/>
                 <StyledTitle>
                     {listing.title}
                 </StyledTitle>

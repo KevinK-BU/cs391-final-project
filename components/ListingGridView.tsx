@@ -20,7 +20,7 @@ const StyledButton = styled.button`
     padding: 2%;
     cursor: pointer;
     border-radius: 8px;
-    height: 325px;
+    height: 350px;
 
     &:hover {
         background: #52687d;
@@ -34,7 +34,7 @@ const StyledTitle = styled.h2`
 `
 
 const StyledImage= styled.img`
-    max-height: 250px;
+    max-height: 225px;
     
     margin: 0 auto;
     border-radius: 8px;

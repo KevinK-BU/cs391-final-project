@@ -29,44 +29,45 @@ const StyledListingWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 2%;
 
-    @media (max-width: 900px) {
+    @media (max-width: 1300px) {
         flex-direction: column;
+        height: auto;
     }
 `
 
-// using "object-fit: cover;" so that user inputted images fully
-// fit the size of the full pop-up component!
-// got styling idea for object-fit from claude.ai
-
 const StyledImage = styled.img`
-    min-width: 45%;
-    max-width: 45%;
-    min-height: 100%;
-    border-radius: 12px 0 0 12px;
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
     box-shadow: #3a6d78 2px -1px 10px;
 
-    @media (max-width: 900px) {
-        min-width: 100%;
-        max-width: 100%;
-        max-height: 280px;
-        object-fit: cover;
+    @media (max-width: 1300px) {
+        width: 100%;
+        height: 500px;
         border-radius: 12px 12px 0 0;
     }
 `
+// using "object-fit: cover;" so that user inputted images fully
+// fit the size of the full pop-up component!
+// got styling idea for object-fit from claude.ai
+// - Kevin Kupeli
+
+
 
 const StyledListingInformation = styled.div`
     display: flex;
     flex-direction: column;
-    width: 90%;
-    margin-top: 1%;
-    margin-left: 3%;
-    margin-right: 2%;
-    padding: 0;
-    position: relative;
+    flex: 1;                
+    padding: 4% 3%;
+    min-height: 0;          
 
-    @media (max-width: 900px) {
+
+    @media (max-width: 1300px) {
         width: auto;
         margin: 20px;
         min-height: 320px;
@@ -76,9 +77,8 @@ const StyledListingInformation = styled.div`
 const StyledListingTitle = styled.h2`
     font-size: calc(1px + 2vw);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-top: 1%;
-    margin-left: 2%;
     font-weight: 600;
+    text-align: center;
 `
 
 const StyledListingDescription = styled.p`
@@ -89,43 +89,41 @@ const StyledListingDescription = styled.p`
 
 const StyledListingPrice = styled.p`
     font-size: calc(1px + 1.7vw);
-    padding-top: 30%;
-    position: absolute;
-    top: 55%;
-
-    @media (max-width: 900px) {
+    margin-top: 25px;
+    @media (max-width: 1300px) {
         position: static;
         padding-top: 20px;
     }
 `
 
-const ButtonRow = styled.div`
-    position: absolute;
-    top: 90%;
-    left: 0;
-    right: 0;
-    display: flex;
-    gap: 12px;
-    align-items: center;
 
-    @media (max-width: 900px) {
-        position: static;
-        margin-top: 24px;
-        flex-wrap: wrap;
+const ButtonRow = styled.div`
+    display: flex;
+    justify-content: space-between;   /* left + right */
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-direction: row;
+    
+    @media (max-width: 1300px) {
+        flex-direction: column;
     }
+    
 `
+const Spacer = styled.div`flex: 1;`
+
 
 const StyledMailTo = styled.a`
     background-color: #848a89;
-    &:hover {
-        background: #3d4851;
-    }
+    &:hover { background: #3d4851; }
     border-radius: 12px;
-    width: 35%;
-    min-width: 160px;
-    padding: 12px 14px;
+    flex: 1;                
+    min-width: 120px;
+    max-width: 48%;
+    padding: 3%;
     text-align: center;
     color: white;
+    text-decoration: none;
 `
 
 const EditButton = styled.button`
@@ -133,24 +131,30 @@ const EditButton = styled.button`
     color: white;
     border: none;
     border-radius: 12px;
-    min-width: 140px;
-    padding: 12px 14px;
+    flex: 1;
+    min-width: 120px;
+    max-width: 48%;
+    padding: 3%;
     cursor: pointer;
-
-    &:hover {
-        background: #234c74;
-    }
+    &:hover { background: #234c74; }
 `
 
 export default function ListingDetailView({ listing, onEdit }: ListingDetailViewProps) {
+    let priceString = listing.price.toString();
+    const price = listing.price
+    const dollars = Math.floor(price);
+    const cents = Math.round((price - dollars) * 100);
+    const centsString = cents < 10 ? "0" + cents : "" + cents;
+    priceString = dollars + "." + centsString;
     return (
         <StyledListingWrapper>
             <StyledImage src={listing.image} alt="Listing image" />
             <StyledListingInformation>
                 <StyledListingTitle>{listing.title}</StyledListingTitle>
                 <StyledListingDescription>{listing.description}</StyledListingDescription>
-                <StyledListingPrice>{"$ "+ listing.price}</StyledListingPrice>
-                <ButtonRow> 
+                <Spacer />
+                <StyledListingPrice>{"$ " + priceString}</StyledListingPrice>
+                <ButtonRow>
                     <StyledMailTo href={"mailto:" + listing.sellerEmail}>Contact Seller</StyledMailTo>
                     {onEdit && (
                         <EditButton type="button" onClick={() => onEdit(listing)}>

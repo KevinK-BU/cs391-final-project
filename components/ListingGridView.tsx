@@ -15,15 +15,31 @@ import { Listing } from "@/types/Listing";
 import ListingDetailView from "@/components/ListingDetailView";
 
 const StyledButton = styled.button`
-    padding: 20px;
-    border: 2px solid red;
-    background: yellow;
+    background-color: #16324F;
+    border: 3px solid #0b2237;
+    padding: 2%;
     cursor: pointer;
+    border-radius: 8px;
+    height: 325px;
 
     &:hover {
-        background: lime;
+        background: #52687d;
     }
 `;
+
+const StyledTitle = styled.h2`
+    color: white;
+    font-weight: bold;
+    padding: 1%;
+`
+
+const StyledImage= styled.img`
+    max-height: 250px;
+    
+    margin: 0 auto;
+    border-radius: 8px;
+    border: 3px solid lightgrey;
+`
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -39,31 +55,46 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-    background-color: #a3cef1;
+    background-color: #16324F;
+    border: 3px solid #0b2237;
     margin: 8%;
-    height: 50%;
-    width: 50%;
+    height: 60%;
+    width: 80vw;
     border-radius: 12px;
     max-width: 40vw;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1300px) {
+        width: 90%;
+        max-width: 90vw;
+        height: auto;
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 5%;
+    }
+`;
+
+const ModalHeader = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 12px 0 12px;
+    flex-shrink: 0;
 `;
 
 const CloseButton = styled.button`
     background: #848a89;
     color: white;
     border: none;
-    padding: 1% 2%;
+    padding: 6px 14px;
     border-radius: 12px;
     cursor: pointer;
-    position: absolute;
-    top: 90%;
-    right: 88%;
-    
 
     &:hover {
         background: #3d4851;
     }
 `;
+
 
 interface ListingGridViewProps {
     listing: Listing;
@@ -73,20 +104,29 @@ interface ListingGridViewProps {
 export default function ListingGridView({ listing, onEdit }: ListingGridViewProps) {
     const [showModal, setShowModal] = useState(false);
     // this use state is a true false state that will be used to conditionally render a given listing's detailed view
-
+    let priceString = listing.price.toString();
+    const price = listing.price
+    const dollars = Math.floor(price);
+    const cents = Math.round((price - dollars) * 100);
+    const centsString = cents < 10 ? "0" + cents : "" + cents;
+    priceString = dollars + "." + centsString;
     return (
         <>
             <StyledButton onClick={() => setShowModal(true)}>
-                {listing.title}
+                <StyledImage src={listing.image}/>
+                <StyledTitle>
+                    {listing.title}
+                </StyledTitle>
+                {'$' + priceString}
             </StyledButton>
 
             {showModal && (
                 <ModalOverlay>
                     <ModalContent>
+                        <ModalHeader>
+                            <CloseButton onClick={() => setShowModal(false)}>Close</CloseButton>
+                        </ModalHeader>
                         <ListingDetailView listing={listing} onEdit={onEdit} />
-                        <CloseButton onClick={() => setShowModal(false)}>
-                            Close
-                        </CloseButton>
                     </ModalContent>
                 </ModalOverlay>
             )}

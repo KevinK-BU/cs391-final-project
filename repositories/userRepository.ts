@@ -10,11 +10,6 @@ export async function findUserByEmail(email: string) {
     return db.collection<User>("users").findOne({ email });
 }
 
-export async function findUserByName(name: string) {
-    const db = await getDb();
-    return db.collection<User>("users").findOne({ name });
-}
-
 export async function findUserById(id: string) {
     const db = await getDb();
     return db.collection<User>("users").findOne({ _id: new ObjectId(id) });

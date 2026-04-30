@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hashPassword, loginUser } from "@/lib/auth";
-import { createUser, findUserByEmail, findUserByName } from "@/repositories/userRepository";
+import { createUser, findUserByEmail } from "@/repositories/userRepository";
 
 // This function handles registering users in the login page. Made by Connor
 

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 
-// Meat and potatoes of auth. Uses the crypto library to hash
+// Meat and potatoes of auth. Uses the crypto library to hash - https://nodejs.org/api/crypto.html
 // passwords, create cookies, and handle basic auth functions. Made by Connor
 
 const COOKIE_NAME = "userId";
@@ -41,7 +41,7 @@ export async function loginUser(userId: string) {
         httpOnly: true,
         sameSite: "strict",
         path: "/",
-        maxAge: 60 * 60 * 12
+        maxAge: 60 * 60 * 4
     });
 }
 

@@ -55,16 +55,7 @@ const ProfileButton = styled.button`
     cursor: pointer;
 `;
 
-const ContentLayout = styled.div`
-    display: grid;
-    grid-template-columns: minmax(320px, 380px) 1fr;
-    gap: 24px;
-    align-items: start;
 
-    @media (max-width: 980px) {
-        grid-template-columns: 1fr;
-    }
-`;
 
 const ListingGrid = styled.div`
     display: grid;
@@ -142,23 +133,21 @@ redirects them to their personal profile page showing their listings.
                     </div>
             </PageHeader>
 
-            <ContentLayout>
-                <ListingSection>
-                    <SectionTitle>Marketplace Listings</SectionTitle>
-                    {listings.length === 0 ? (
-                        <EmptyState>No listings found yet. Create the first one on the left.</EmptyState>
-                    ) : (
-                        <ListingGrid>
-                            {listings.map(listing => (
-                                <ListingGridView
-                                    key={listing._id.toString()}
-                                    listing={listing}
-                                />
-                            ))}
-                        </ListingGrid>
-                    )}
-                </ListingSection>
-            </ContentLayout>
+            <ListingSection>
+                <SectionTitle>Marketplace Listings</SectionTitle>
+                {listings.length === 0 ? (
+                    <EmptyState>No listings found yet. Create the first one on the left.</EmptyState>
+                ) : (
+                    <ListingGrid>
+                        {listings.map(listing => (
+                            <ListingGridView
+                                key={listing._id.toString()}
+                                listing={listing}
+                            />
+                        ))}
+                    </ListingGrid>
+                )}
+            </ListingSection>
         </PageWrapper>
     );
 }

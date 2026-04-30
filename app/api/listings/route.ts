@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createListing, getListings, getListingsByUserId } from "@/repositories/listingRepository";
 import { ListingInput } from "@/types/Listing";
+import { getUserIdFromCookie } from "@/lib/auth";
+import { findUserById } from "@/repositories/userRepository";
 
 export async function GET(request: Request) {
 
@@ -28,14 +30,29 @@ added section below -- Kristian Plonski
 
 export async function POST(request: Request) {
     const body = await request.json() as Partial<ListingInput>;
+    const userId = await getUserIdFromCookie();
+
+    if (!userId) {
+        return NextResponse.json(
+            { error: "You must be logged in to create a listing." },
+            { status: 401 }
+        );
+    }
+
+    const user = await findUserById(userId);
+
+    if (!user) {
+        return NextResponse.json(
+            { error: "User not found." },
+            { status: 404 }
+        );
+    }
 
     if (
         !body.title ||
         !body.description ||
         !body.image ||
-        typeof body.price !== "number" ||
-        !body.user_id ||
-        !body.sellerEmail
+        typeof body.price !== "number"
     ) {
         return NextResponse.json(
             { error: "Missing one or more required listing fields." },
@@ -48,8 +65,8 @@ export async function POST(request: Request) {
         description: body.description,
         image: body.image,
         price: body.price,
-        user_id: body.user_id,
-        sellerEmail: body.sellerEmail,
+        user_id: user._id.toString(),
+        sellerEmail: user.email,
     });
 
     return NextResponse.json(createdListing, { status: 201 });

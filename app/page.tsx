@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import {useEffect, useState} from "react";
 import {Listing} from "@/types/Listing";
 import ListingGridView from "@/components/ListingGridView";
-import ListingForm from "@/components/ListingForm"; //KP
 
 const PageWrapper = styled.main`
     min-height: 100vh;
@@ -26,13 +25,13 @@ const PageHeader = styled.div`
 const Title = styled.h1`
     margin: 0 0 8px;
     color: #16324f;
-    font-size: 2.5rem;
+    font-size: 40px;
 `;
 
 const Subtitle = styled.p`
     margin: 0;
     color: #52687d;
-    font-size: 1rem;
+    font-size: 16px;
 `;
 
 const LogoutButton = styled.button`
@@ -93,35 +92,17 @@ const EmptyState = styled.p`
 
 export default function Home() {
     const [listings, setListings] = useState<Listing[]>([]);
-    const [editingListing, setEditingListing] = useState<Listing | null>(null);
-    let listingFormKey = "create";
 
-    if (editingListing) {
-        listingFormKey = editingListing._id.toString();
-    }
-
+// -- KP --
+//loads listings ; (fills the actual marketplace with data from the backend)
     useEffect(() => {
-        const fetchListings = async () => {
-            const res = await fetch("/api/listings");
-            const data = await res.json();
-            setListings(data);
+        const loadPageData = async () => {
+            const listingsRes = await fetch("/api/listings");
+            const listingsData = await listingsRes.json();
+            setListings(listingsData);
         };
-        fetchListings();
+        loadPageData();
     }, []);
-
-    function handleSavedListing(savedListing: Listing, mode: "create" | "edit") {
-        if (mode === "create") {
-            setListings((currentListings) => [savedListing, ...currentListings]);
-            return;
-        }
-
-        setListings((currentListings) =>
-            currentListings.map((listing) =>
-                listing._id.toString() === savedListing._id.toString() ? savedListing : listing
-            )
-        );
-        setEditingListing(null);
-    }
 
     async function handleLogout() {
         await fetch("/api/auth/logout", {
@@ -136,16 +117,11 @@ Reads the logged-in user's ID directly from the browser cookie and
 redirects them to their personal profile page showing their listings.
 */
     async function handleProfile() {
-
-    const response = await fetch("/api/auth/me");
-
-    const data = await response.json();
-
-    if (!data.user) return;
-
-    const userId = data.user.id;
-
-    window.location.href = `/profile/${userId}`;
+        const response = await fetch("/api/auth/me");
+        const data = await response.json();
+        if (!data.user) return;
+        const userId = data.user.id;
+        window.location.href = `/profile/${userId}`;
     }
 
     return (
@@ -167,13 +143,6 @@ redirects them to their personal profile page showing their listings.
             </PageHeader>
 
             <ContentLayout>
-                <ListingForm
-                    key={listingFormKey}
-                    editingListing={editingListing}
-                    onCancelEdit={() => setEditingListing(null)}
-                    onSaved={handleSavedListing}
-                />
-
                 <ListingSection>
                     <SectionTitle>Marketplace Listings</SectionTitle>
                     {listings.length === 0 ? (
@@ -184,7 +153,6 @@ redirects them to their personal profile page showing their listings.
                                 <ListingGridView
                                     key={listing._id.toString()}
                                     listing={listing}
-                                    onEdit={setEditingListing}
                                 />
                             ))}
                         </ListingGrid>
@@ -194,3 +162,7 @@ redirects them to their personal profile page showing their listings.
         </PageWrapper>
     );
 }
+
+// -- KP --
+// for the listing form above, should ideally send the selected item for editing
+// if cancelled it goes back to create, if saved the homepage updates

@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 
-// Meat and potatoes of auth. Uses the crypto library to hash
-// passwords, create cookies, and handle basic auth functions/
+// Meat and potatoes of auth. Uses the crypto library to hash - https://nodejs.org/api/crypto.html
+// passwords, create cookies, and handle basic auth functions. Made by Connor
 
 const COOKIE_NAME = "userId";
 
@@ -35,12 +35,13 @@ export async function loginUser(userId: string) {
     // Gets the user's cookies
     const cookieStore = await cookies();
 
-    // Sets an auth cookie that lasts one day
+    // Sets an auth cookie that lasts 1/2 day. Is potentially vulnerable to cookie injection
+    // if the attacker were to figure out the user object id created by MongoDB. Could be changed.
     cookieStore.set(COOKIE_NAME, userId, {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "strict",
         path: "/",
-        maxAge: 86400,
+        maxAge: 60 * 60 * 4
     });
 }
 

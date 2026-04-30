@@ -1,3 +1,15 @@
+
+/*
+This is the detailed view modal of a given listing!
+- built by Kevin Kupeli
+- the component will render when a listing is clicked, and will show the details of a listing
+    - details:
+    - price
+    - listing title and description
+    - item image
+ */
+
+
 /*
 Kristian Plonski changes:
 - replaced hardcoded email w real sellerEmail for each listing
@@ -23,6 +35,10 @@ const StyledListingWrapper = styled.div`
         flex-direction: column;
     }
 `
+
+// using "object-fit: cover;" so that user inputted images fully
+// fit the size of the full pop-up component!
+// got styling idea for object-fit from claude.ai
 
 const StyledImage = styled.img`
     min-width: 45%;
@@ -133,7 +149,7 @@ export default function ListingDetailView({ listing, onEdit }: ListingDetailView
             <StyledListingInformation>
                 <StyledListingTitle>{listing.title}</StyledListingTitle>
                 <StyledListingDescription>{listing.description}</StyledListingDescription>
-                <StyledListingPrice>{"$ "+ listing.price + ".00"}</StyledListingPrice>
+                <StyledListingPrice>{"$ "+ listing.price}</StyledListingPrice>
                 <ButtonRow> 
                     <StyledMailTo href={"mailto:" + listing.sellerEmail}>Contact Seller</StyledMailTo>
                     {onEdit && (

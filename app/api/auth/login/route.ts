@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { loginUser, passwordMatches } from "@/lib/auth";
 import { findUserByEmail } from "@/repositories/userRepository";
 
-// This api route handles login requests
+// This api route handles login requests. Made by Connor
 
 export async function POST(request: Request) {
     // Getting the headers and payload for the login request

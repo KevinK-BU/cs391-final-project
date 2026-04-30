@@ -1,3 +1,12 @@
+/*
+Listing Grid View Component
+
+built by Kevin Kupeli
+these components will be rendered for every listing, and in a larger grid
+on the homescreen, will show a simplified version of the listing!
+
+ */
+
 "use client"
 
 import { useState } from "react";
@@ -58,11 +67,12 @@ const CloseButton = styled.button`
 
 interface ListingGridViewProps {
     listing: Listing;
-    onEdit: (listing: Listing) => void; // KP -- added for editting posts
+    onEdit?: (listing: Listing) => void; // KP -- added for editting posts
 }
 
 export default function ListingGridView({ listing, onEdit }: ListingGridViewProps) {
     const [showModal, setShowModal] = useState(false);
+    // this use state is a true false state that will be used to conditionally render a given listing's detailed view
 
     return (
         <>

@@ -46,6 +46,13 @@ export async function updateListing(id: string, listing: ListingInput): Promise<
     return result;
 }
 
+export async function getListingById(id: string): Promise<Listing | null> {
+    const db = await getDb();
+    const objectId = new ObjectId(id);
+
+    return await db.collection<Listing>("listings").findOne({ _id: objectId });
+}
+
 
 /* below this point added by Ibrahim Alburi: */
 /* allows the listings API route to optionally filter results using a
